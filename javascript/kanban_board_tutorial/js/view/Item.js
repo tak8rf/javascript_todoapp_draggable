@@ -1,9 +1,9 @@
-// import DropZone from "./DropZone.js";
+import DropZone from "./DropZone.js";
 import KanbanAPI from "../api/KanbanAPI.js";
 
 export default class Item {
 	constructor(id, content) {
-		// const bottomDropZone = DropZone.createDropZone();
+		const bottomDropZone = DropZone.createDropZone();
 
 		this.elements = {};
 		this.elements.root = Item.createRoot();
@@ -12,7 +12,9 @@ export default class Item {
 		this.elements.root.dataset.id = id;
 		this.elements.input.textContent = content;
 		this.content = content;
-		// this.elements.root.appendChild(bottomDropZone);
+		//itemの子要素としてdropzoneを作成
+		//=this.elements.root.appendChild(DropZone.createDropZone());
+		this.elements.root.appendChild(bottomDropZone);
 
 		const onBlur = () => {
 			const newContent = this.elements.input.textContent.trim();
@@ -39,17 +41,19 @@ export default class Item {
 				KanbanAPI.deleteItem(id);
 				//削除の処理を実行。リロードすると削除されている。
 				this.elements.input.removeEventListener("blur", onBlur);
+				//以下を記載することでリロードせずに削除が実行。
+				//親要素に行ってから、子要素を削除する形をとっている。
 				this.elements.root.parentElement.removeChild(this.elements.root);
 			}
 		});
 
-		// this.elements.root.addEventListener("dragstart", e => {
-		// 	e.dataTransfer.setData("text/plain", id);
-		// });
+		this.elements.root.addEventListener("dragstart", e => {
+			e.dataTransfer.setData("text/plain", id);
+		});
 
-		// this.elements.input.addEventListener("drop", e => {
-		// 	e.preventDefault();
-		// });
+		this.elements.input.addEventListener("drop", e => {
+			e.preventDefault();
+		});
 	}
 
 	static createRoot() {

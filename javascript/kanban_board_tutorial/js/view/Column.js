@@ -1,10 +1,10 @@
 import KanbanAPI from "../api/KanbanAPI.js";
-// import DropZone from "./DropZone.js";
+import DropZone from "./DropZone.js";
 import Item from "./Item.js";
 
 export default class Column {
 	constructor(id, title) {
-		// const topDropZone = DropZone.createDropZone();
+		const topDropZone = DropZone.createDropZone();
 
 		this.elements = {};
 		//作成したHTML全体を取得
@@ -16,7 +16,8 @@ export default class Column {
 		//Kanban.jsのidとtitleを取得
 		this.elements.root.dataset.id = id;
 		this.elements.title.textContent = title;
-		// this.elements.items.appendChild(topDropZone);
+		//カラムのトップに追加できるようにcolum.jsにも作っておく。
+		this.elements.items.appendChild(topDropZone);
 
 		//クリックすることでitemを作成
 		this.elements.addItem.addEventListener("click", () => {
